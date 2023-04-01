@@ -3,6 +3,7 @@ package com.example.note_glance_widget.note
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
+import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
@@ -33,8 +34,6 @@ fun NoteScreen(
         viewModel.effect.onEach { effect ->
             when (effect) {
                 is Effect.Activate -> {
-                    Log.wtf("activate", "NoteScreen: ${effect.note.title} ${effect.note.text}")
-
                     titleFieldValue = TextFieldValue(effect.note.title)
                     textFieldValue = TextFieldValue(effect.note.text)
                 }
@@ -52,23 +51,25 @@ fun NoteScreen(
                 TextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
                     value = titleFieldValue,
                     onValueChange = { titleFieldValue = it },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.White,
                     ),
+                    placeholder = { Text("Title") }
                 )
 
                 TextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
                     value = textFieldValue,
                     onValueChange = { textFieldValue = it },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.White,
                     ),
+                    placeholder = { Text("Content") }
                 )
             }
         }
