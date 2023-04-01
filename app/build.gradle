@@ -11,7 +11,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.note_glance_widget"
+        applicationId "a.com.example.note_glance_widget"
         minSdk 28
         targetSdk 33
         versionCode 1

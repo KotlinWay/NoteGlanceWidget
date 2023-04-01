@@ -10,6 +10,7 @@ import com.example.note_glance_widget.navigation.Screens
 import com.example.note_glance_widget.note.NoteScreen
 import com.example.note_glance_widget.note.model.NoteId
 import com.example.note_glance_widget.notes.NotesScreen
+import com.example.note_glance_widget.notes.NotesViewMode
 
 @Composable
 fun RootScreen() {
@@ -21,7 +22,7 @@ fun RootScreen() {
         startDestination = Screens.NotesScreen.route
     ) {
         composable(route = Screens.NotesScreen.route) {
-            NotesScreen { noteId ->
+            NotesScreen(viewMode = NotesViewMode.CREATION) { noteId ->
                 navController.navigate(Screens.NoteScreen.withParam(noteId))
             }
         }

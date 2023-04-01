@@ -31,5 +31,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
         </receiver>
+
+        <activity android:name=".widget.config.ConfigWidgetActivity"/>
     </application>
 </manifest>

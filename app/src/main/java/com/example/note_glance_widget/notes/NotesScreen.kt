@@ -20,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.note_glance_widget.R
-import com.example.note_glance_widget.note.NoteContract
 import com.example.note_glance_widget.note.model.Note
 import com.example.note_glance_widget.note.model.NoteId
 import kotlinx.coroutines.flow.launchIn
@@ -28,23 +27,26 @@ import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun NotesScreen(
-    navigateToNoteListener: (NoteId) -> Unit
+    viewMode: NotesViewMode,
+    clickOnNoteListener: (NoteId) -> Unit
 ) {
     val viewModel = hiltViewModel<NotesViewModel>()
 
     LaunchedEffect(Unit) {
         viewModel.effect.onEach { effect ->
             when (effect) {
-                NotesContract.Effect.CreateNewNote -> navigateToNoteListener(NoteId.NONE)
-                is NotesContract.Effect.OpenNote -> navigateToNoteListener(effect.noteId)
+                NotesContract.Effect.CreateNewNote -> clickOnNoteListener(NoteId.NONE)
+                is NotesContract.Effect.OpenNote -> clickOnNoteListener(effect.noteId)
             }
         }.launchIn(this)
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Notes(viewModel)
-        FAB(iconRes = R.drawable.ic_add) {
-            viewModel.setEvent(NotesContract.Event.ClickOnAddNote)
+        if(viewMode == NotesViewMode.CREATION) {
+            FAB(iconRes = R.drawable.ic_add) {
+                viewModel.setEvent(NotesContract.Event.ClickOnAddNote)
+            }
         }
     }
 }
@@ -108,4 +110,8 @@ fun BoxScope.FAB(
             colorFilter = ColorFilter.tint(Color.White)
         )
     }
+}
+
+enum class NotesViewMode{
+    VIEW, CREATION
 }
