@@ -21,6 +21,7 @@ class NotesContract {
     }
 
     sealed class Effect : ViewSideEffect {
-
+        data class OpenNote(val noteId: NoteId): Effect()
+        object CreateNewNote: Effect()
     }
 }
