@@ -1,6 +1,8 @@
 package com.example.note_glance_widget.notes
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.note_glance_widget.R
+import com.example.note_glance_widget.note.NoteContract
 import com.example.note_glance_widget.note.model.Note
 import com.example.note_glance_widget.note.model.NoteId
 import kotlinx.coroutines.flow.launchIn
@@ -40,27 +43,40 @@ fun NotesScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Notes(viewModel)
-        FAB(viewModel)
+        FAB(iconRes = R.drawable.ic_add) {
+            viewModel.setEvent(NotesContract.Event.ClickOnAddNote)
+        }
     }
 }
 
 @Composable
-fun BoxScope.Notes(viewModel: NotesViewModel){
+fun BoxScope.Notes(viewModel: NotesViewModel) {
     val state by viewModel.viewState
 
     LazyColumn {
         state.notes.forEach { note ->
-            item(key = note.id) {
-                NoteItem(note)
+            item(key = note.id.id) {
+                NoteItem(note) { viewModel.setEvent(NotesContract.Event.ClickOnNote(note.id)) }
             }
         }
     }
 }
 
 @Composable
-fun NoteItem(note: Note) {
-    Card(backgroundColor = Color.Blue.copy(0.5f)) {
-        Column(modifier = Modifier.padding(16.dp)) {
+fun NoteItem(note: Note, clickListener: () -> Unit) {
+    Card(
+        backgroundColor = Color.Blue.copy(0.2f),
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable {
+                clickListener()
+            }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+        ) {
             with(note) {
                 if (title.isNotEmpty()) Text(title, modifier = Modifier.padding(bottom = 16.dp))
                 if (text.isNotEmpty()) Text(text, modifier = Modifier.padding(bottom = 16.dp))
@@ -72,10 +88,11 @@ fun NoteItem(note: Note) {
 
 @Composable
 fun BoxScope.FAB(
-    viewModel: NotesViewModel
+    @DrawableRes iconRes: Int,
+    clickListener: () -> Unit,
 ) {
     FloatingActionButton(
-        onClick = { viewModel.setEvent(NotesContract.Event.ClickOnAddNote) },
+        onClick = clickListener,
         backgroundColor = Color.Blue,
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
@@ -83,7 +100,7 @@ fun BoxScope.FAB(
             .padding(18.dp)
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_add),
+            painter = painterResource(iconRes),
             contentDescription = null,
             modifier = Modifier.size(36.dp),
             colorFilter = ColorFilter.tint(Color.White)

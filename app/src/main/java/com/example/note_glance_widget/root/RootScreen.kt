@@ -35,7 +35,9 @@ fun RootScreen() {
         ) { backStackEntry ->
             NoteScreen(
                 noteId = backStackEntry.arguments?.getLong(Screens.NoteScreen.noteId)
-                    ?.let { NoteId(it) } ?: NoteId.NONE)
+                    ?.let { NoteId(it) } ?: NoteId.NONE) {
+                navController.popBackStack()
+            }
         }
     }
 }
