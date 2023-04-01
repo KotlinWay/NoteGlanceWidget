@@ -1,0 +1,21 @@
+package com.example.note_glance_widget.widget
+
+import androidx.compose.runtime.Composable
+import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetReceiver
+import androidx.glance.state.GlanceStateDefinition
+import androidx.glance.state.PreferencesGlanceStateDefinition
+
+class NoteWidget : GlanceAppWidget() {
+
+    override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
+
+    @Composable
+    override fun Content() {
+        NoteWidgetContent()
+    }
+}
+
+class NoteWidgetReceiver : GlanceAppWidgetReceiver() {
+    override val glanceAppWidget: GlanceAppWidget = NoteWidget()
+}

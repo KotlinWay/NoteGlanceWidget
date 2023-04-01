@@ -70,7 +70,9 @@ fun NoteItem(note: Note, clickListener: () -> Unit) {
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .clickable {
                 clickListener()
-            }
+            },
+        elevation = 0.dp,
+        shape = RoundedCornerShape(16.dp)
     ) {
         Column(
             modifier = Modifier
@@ -80,7 +82,7 @@ fun NoteItem(note: Note, clickListener: () -> Unit) {
             with(note) {
                 if (title.isNotEmpty()) Text(title, modifier = Modifier.padding(bottom = 16.dp))
                 if (text.isNotEmpty()) Text(text, modifier = Modifier.padding(bottom = 16.dp))
-                Text(updatedAt.toString())
+                Text(formatUpdatedAt)
             }
         }
     }
