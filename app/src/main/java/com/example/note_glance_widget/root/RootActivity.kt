@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import com.example.note_glance_widget.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RootActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

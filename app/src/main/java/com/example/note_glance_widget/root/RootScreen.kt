@@ -1,8 +1,6 @@
 package com.example.note_glance_widget.root
 
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
