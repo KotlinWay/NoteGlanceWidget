@@ -8,6 +8,9 @@ import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.Preferences
 import androidx.glance.GlanceModifier
 import androidx.glance.ImageProvider
+import androidx.glance.action.actionParametersOf
+import androidx.glance.action.actionStartActivity
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.unit.ColorProvider
@@ -19,6 +22,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import com.example.note_glance_widget.R
+import com.example.note_glance_widget.root.RootActivity
 import com.example.note_glance_widget.widget.WidgetKeys.Prefs.noteIdPK
 import com.example.note_glance_widget.widget.WidgetKeys.Prefs.noteLastUpdatePK
 import com.example.note_glance_widget.widget.WidgetKeys.Prefs.noteTextPK
@@ -37,21 +41,22 @@ fun NoteWidgetContent(prefs: Preferences) {
             .background(imageProvider = ImageProvider(R.drawable.widget_background))
             .appWidgetBackground()
             .padding(16.dp)
+
     ) {
         if (noteTitle.isNotEmpty()) item {
-            WidgetText(noteTitle)
+            WidgetText(noteTitle, noteId)
         }
         if (noteText.isNotEmpty()) item {
-            WidgetText(noteText)
+            WidgetText(noteText, noteId)
         }
         if (updatedAt.isNotEmpty()) item {
-            WidgetText(updatedAt, 16.sp)
+            WidgetText(updatedAt, noteId, 16.sp)
         }
     }
 }
 
 @Composable
-fun WidgetText(text: String, fontSize: TextUnit = 20.sp) {
+fun WidgetText(text: String, noteId: Long, fontSize: TextUnit = 20.sp) {
     Text(
         text = text,
         style = TextStyle(
@@ -61,6 +66,13 @@ fun WidgetText(text: String, fontSize: TextUnit = 20.sp) {
             color = ColorProvider(
                 day = Color.White,
                 night = Color.White
+            )
+        ),
+        modifier = GlanceModifier.clickable(
+            actionStartActivity<RootActivity>(
+                parameters = actionParametersOf(
+                    WidgetKeys.Params.noteIdParam to noteId
+                )
             )
         )
     )

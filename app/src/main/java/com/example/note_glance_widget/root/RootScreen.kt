@@ -1,6 +1,8 @@
 package com.example.note_glance_widget.root
 
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,9 +14,14 @@ import com.example.note_glance_widget.notes.NotesScreen
 import com.example.note_glance_widget.notes.NotesViewMode
 
 @Composable
-fun RootScreen() {
+fun RootScreen(startWithNoteId: Long) {
 
     val navController = rememberNavController()
+
+    LaunchedEffect(startWithNoteId) {
+        if (startWithNoteId != Long.MIN_VALUE)
+            navController.navigate(Screens.NoteScreen.withParam(startWithNoteId))
+    }
 
     NavHost(
         navController = navController,
@@ -35,7 +42,8 @@ fun RootScreen() {
         ) { backStackEntry ->
             NoteScreen(
                 noteId = backStackEntry.arguments?.getLong(Screens.NoteScreen.noteId)
-                     ?: Long.MIN_VALUE) {
+                    ?: Long.MIN_VALUE
+            ) {
                 navController.popBackStack()
             }
         }

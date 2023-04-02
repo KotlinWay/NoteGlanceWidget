@@ -14,6 +14,6 @@ object WidgetKeys {
     }
 
     object Params {
-        val noteIdParam = ActionParameters.Key<Long>("noteIdParam")
+        val noteIdParam = ActionParameters.Key<Long>(NOTE_ID)
     }
 }
