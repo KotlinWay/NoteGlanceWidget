@@ -4,11 +4,10 @@ import com.example.note_glance_widget.common.application.ViewEvent
 import com.example.note_glance_widget.common.application.ViewSideEffect
 import com.example.note_glance_widget.common.application.ViewState
 import com.example.note_glance_widget.note.model.Note
-import com.example.note_glance_widget.note.model.NoteId
 
 class NoteContract {
     sealed class Event : ViewEvent {
-        data class Activate(val noteId: NoteId) : Event()
+        data class Activate(val noteId: Long) : Event()
         data class SaveNote(
             val title: String,
             val text: String

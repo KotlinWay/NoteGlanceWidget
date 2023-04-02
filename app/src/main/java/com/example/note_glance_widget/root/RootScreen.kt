@@ -8,7 +8,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.note_glance_widget.navigation.Screens
 import com.example.note_glance_widget.note.NoteScreen
-import com.example.note_glance_widget.note.model.NoteId
 import com.example.note_glance_widget.notes.NotesScreen
 import com.example.note_glance_widget.notes.NotesViewMode
 
@@ -30,13 +29,13 @@ fun RootScreen() {
         composable(
             route = Screens.NoteScreen.route,
             arguments = listOf(navArgument(Screens.NoteScreen.noteId) {
-                defaultValue = NoteId.NONE.id
+                defaultValue = Long.MIN_VALUE
                 type = NavType.LongType
             })
         ) { backStackEntry ->
             NoteScreen(
                 noteId = backStackEntry.arguments?.getLong(Screens.NoteScreen.noteId)
-                    ?.let { NoteId(it) } ?: NoteId.NONE) {
+                     ?: Long.MIN_VALUE) {
                 navController.popBackStack()
             }
         }

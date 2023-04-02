@@ -7,8 +7,6 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.currentState
 import androidx.glance.state.GlanceStateDefinition
 import androidx.glance.state.PreferencesGlanceStateDefinition
-import com.example.note_glance_widget.note.model.NoteId
-import com.example.note_glance_widget.widget.WidgetKeys.Prefs.noteIdPK
 
 class NoteWidget : GlanceAppWidget() {
 

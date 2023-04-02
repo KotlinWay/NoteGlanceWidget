@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.Preferences
 import androidx.glance.GlanceModifier
 import androidx.glance.ImageProvider
+import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.unit.ColorProvider
 import androidx.glance.background
@@ -18,7 +19,6 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import com.example.note_glance_widget.R
-import com.example.note_glance_widget.note.model.NoteId
 import com.example.note_glance_widget.widget.WidgetKeys.Prefs.noteIdPK
 import com.example.note_glance_widget.widget.WidgetKeys.Prefs.noteLastUpdatePK
 import com.example.note_glance_widget.widget.WidgetKeys.Prefs.noteTextPK
@@ -27,7 +27,7 @@ import com.example.note_glance_widget.widget.WidgetKeys.Prefs.noteTitlePK
 @Composable
 fun NoteWidgetContent(prefs: Preferences) {
 
-    val noteId = prefs[noteIdPK] ?: NoteId.NONE.id
+    val noteId = prefs[noteIdPK] ?: Long.MIN_VALUE
     val noteTitle = prefs[noteTitlePK].orEmpty()
     val noteText = prefs[noteTextPK].orEmpty()
     val updatedAt = prefs[noteLastUpdatePK].orEmpty()
@@ -35,6 +35,7 @@ fun NoteWidgetContent(prefs: Preferences) {
     LazyColumn(
         modifier = GlanceModifier
             .background(imageProvider = ImageProvider(R.drawable.widget_background))
+            .appWidgetBackground()
             .padding(16.dp)
     ) {
         if (noteTitle.isNotEmpty()) item {

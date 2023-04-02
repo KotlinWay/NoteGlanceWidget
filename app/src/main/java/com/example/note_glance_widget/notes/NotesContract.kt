@@ -4,11 +4,10 @@ import com.example.note_glance_widget.common.application.ViewEvent
 import com.example.note_glance_widget.common.application.ViewSideEffect
 import com.example.note_glance_widget.common.application.ViewState
 import com.example.note_glance_widget.note.model.Note
-import com.example.note_glance_widget.note.model.NoteId
 
 class NotesContract {
     sealed class Event : ViewEvent {
-        data class ClickOnNote(val noteId: NoteId) : Event()
+        data class ClickOnNote(val noteId: Long) : Event()
         object ClickOnAddNote : Event()
     }
 
@@ -21,7 +20,7 @@ class NotesContract {
     }
 
     sealed class Effect : ViewSideEffect {
-        data class OpenNote(val noteId: NoteId): Effect()
+        data class OpenNote(val noteId: Long): Effect()
         object CreateNewNote: Effect()
     }
 }

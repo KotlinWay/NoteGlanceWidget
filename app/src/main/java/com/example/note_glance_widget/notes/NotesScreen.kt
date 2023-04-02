@@ -21,21 +21,20 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.note_glance_widget.R
 import com.example.note_glance_widget.note.model.Note
-import com.example.note_glance_widget.note.model.NoteId
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun NotesScreen(
     viewMode: NotesViewMode,
-    clickOnNoteListener: (NoteId) -> Unit
+    clickOnNoteListener: (Long) -> Unit
 ) {
     val viewModel = hiltViewModel<NotesViewModel>()
 
     LaunchedEffect(Unit) {
         viewModel.effect.onEach { effect ->
             when (effect) {
-                NotesContract.Effect.CreateNewNote -> clickOnNoteListener(NoteId.NONE)
+                NotesContract.Effect.CreateNewNote -> clickOnNoteListener(Long.MIN_VALUE)
                 is NotesContract.Effect.OpenNote -> clickOnNoteListener(effect.noteId)
             }
         }.launchIn(this)
@@ -57,7 +56,7 @@ fun BoxScope.Notes(viewModel: NotesViewModel) {
 
     LazyColumn {
         state.notes.forEach { note ->
-            item(key = note.id.id) {
+            item(key = note.id) {
                 NoteItem(note) { viewModel.setEvent(NotesContract.Event.ClickOnNote(note.id)) }
             }
         }
@@ -93,14 +92,15 @@ fun NoteItem(note: Note, clickListener: () -> Unit) {
 @Composable
 fun BoxScope.FAB(
     @DrawableRes iconRes: Int,
-    clickListener: () -> Unit,
+    alignment: Alignment = Alignment.BottomEnd,
+    clickListener: () -> Unit
 ) {
     FloatingActionButton(
         onClick = clickListener,
         backgroundColor = Color.Blue,
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
-            .align(Alignment.BottomEnd)
+            .align(alignment)
             .padding(18.dp)
     ) {
         Image(

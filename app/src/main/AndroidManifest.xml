@@ -32,6 +32,11 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
-        <activity android:name=".widget.config.ConfigWidgetActivity"/>
+        <receiver
+            android:name=".widget.PinWidgetReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".widget.config.ConfigWidgetActivity" />
     </application>
 </manifest>

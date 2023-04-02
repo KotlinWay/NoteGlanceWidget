@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
@@ -14,14 +15,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.note_glance_widget.R
 import com.example.note_glance_widget.note.NoteContract.*
-import com.example.note_glance_widget.note.model.NoteId
 import com.example.note_glance_widget.notes.FAB
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun NoteScreen(
-    noteId: NoteId,
+    noteId: Long,
     saveNoteListener: () -> Unit
 ) {
 
@@ -81,6 +81,10 @@ fun NoteScreen(
                     text = textFieldValue.text
                 )
             )
+        }
+
+        FAB(R.drawable.ic_pin_widget, Alignment.BottomStart) {
+            viewModel.setEvent(Event.PinWidget)
         }
     }
 }

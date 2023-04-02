@@ -1,11 +1,16 @@
 package com.example.note_glance_widget.note
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.lifecycle.viewModelScope
 import com.example.note_glance_widget.common.application.BaseViewModel
 import com.example.note_glance_widget.note.NoteContract.*
-import com.example.note_glance_widget.note.model.NoteId
 import com.example.note_glance_widget.note.model.toEntity
+import com.example.note_glance_widget.widget.NOTE_ID
+import com.example.note_glance_widget.widget.NoteWidgetReceiver
+import com.example.note_glance_widget.widget.PinWidgetReceiver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -39,11 +44,18 @@ class NoteViewModel @Inject constructor(
     }
 
     private fun handlePinWidget() {
-        TODO("Not yet implemented")
+        val noteId = currentState().note?.id ?: return
+        val intent = Intent(context, PinWidgetReceiver::class.java)
+        intent.putExtra(NOTE_ID, currentState().note?.id)
+        val pendingIntent = PendingIntent.getBroadcast(context, noteId.toInt(), intent, PendingIntent.FLAG_IMMUTABLE)
+        GlanceAppWidgetManager(context).requestPinGlanceAppWidget(
+            NoteWidgetReceiver::class.java,
+            successCallback = pendingIntent
+        )
     }
 
-    private fun activate(noteId: NoteId) {
-        if (noteId == NoteId.NONE) obtainNewNote() else bindNoteToState(noteId)
+    private fun activate(noteId: Long) {
+        if (noteId == Long.MIN_VALUE) obtainNewNote() else bindNoteToState(noteId)
     }
 
     private fun obtainNewNote() = viewModelScope.launch{
@@ -53,7 +65,7 @@ class NoteViewModel @Inject constructor(
         setEffect { Effect.Activate(note) }
     }
 
-    private fun bindNoteToState(noteId: NoteId) = viewModelScope.launch {
+    private fun bindNoteToState(noteId: Long) = viewModelScope.launch {
         val note = notesRepository.getNote(noteId)?.let { it.toEntity() } ?: return@launch
         updateState { copy(note = note) }
         setEffect { Effect.Activate(note) }

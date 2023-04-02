@@ -10,7 +10,6 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.lifecycle.lifecycleScope
 import com.example.note_glance_widget.note.NotesRepository
-import com.example.note_glance_widget.note.model.NoteId
 import com.example.note_glance_widget.note.model.toEntity
 import com.example.note_glance_widget.notes.NotesScreen
 import com.example.note_glance_widget.notes.NotesViewMode
@@ -46,17 +45,17 @@ class ConfigWidgetActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleSelectNote(id: NoteId) {
+    private fun handleSelectNote(id: Long) {
         setResult(RESULT_OK, result)
         finish()
         saveWidgetState(id)
     }
 
-    private fun saveWidgetState(id: NoteId) = lifecycleScope.launch(Dispatchers.IO) {
+    private fun saveWidgetState(id: Long) = lifecycleScope.launch(Dispatchers.IO) {
         val glanceId = GlanceAppWidgetManager(applicationContext).getGlanceIdBy(widgetId)
         val note = repository.getNote(id)?.let { it.toEntity() } ?: return@launch
         updateAppWidgetState(applicationContext, glanceId) { prefs ->
-            prefs[noteIdPK] = id.id
+            prefs[noteIdPK] = id
             prefs[noteTitlePK] = note.title
             prefs[noteTextPK] = note.text
             prefs[noteLastUpdatePK] = note.formatUpdatedAt

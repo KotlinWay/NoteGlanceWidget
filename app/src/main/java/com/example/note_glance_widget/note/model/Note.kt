@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 data class Note(
-    val id: NoteId,
+    val id: Long,
     val title: String,
     val text: String,
     val updatedAt: LocalDateTime
@@ -15,14 +15,14 @@ data class Note(
 }
 
 fun NoteDb.toEntity() = Note(
-    id = NoteId(id),
+    id = id,
     title = title.orEmpty(),
     text = text.orEmpty(),
     updatedAt = LocalDateTime.parse(updatedAt)
 )
 
 fun Note.toEntityDb() = NoteDb(
-    id = id.id,
+    id = id,
     title = title,
     text = text,
     updatedAt = updatedAt.toString()
