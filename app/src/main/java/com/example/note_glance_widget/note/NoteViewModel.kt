@@ -27,7 +27,7 @@ class NoteViewModel @Inject constructor(
 
     override fun handleEvent(event: Event) = when (event) {
         is Event.Activate -> activate(event.noteId)
-        Event.PinWidget -> handlePinWidget()
+        is Event.PinWidget -> handlePinWidget(event.title, event.text)
         is Event.SaveNote -> handleSaveNote(event.title, event.text)
     }
 
@@ -43,15 +43,18 @@ class NoteViewModel @Inject constructor(
         }
     }
 
-    private fun handlePinWidget() {
-        val noteId = currentState().note?.id ?: return
-        val intent = Intent(context, PinWidgetReceiver::class.java)
-        intent.putExtra(NOTE_ID, currentState().note?.id)
-        val pendingIntent = PendingIntent.getBroadcast(context, noteId.toInt(), intent, PendingIntent.FLAG_IMMUTABLE)
-        GlanceAppWidgetManager(context).requestPinGlanceAppWidget(
-            NoteWidgetReceiver::class.java,
-            successCallback = pendingIntent
-        )
+    private fun handlePinWidget(title: String, text: String) {
+        viewModelScope.launch {
+            currentState().note?.copy()?.let { notesRepository.updateNote(it.copy(title = title, text = text)) }
+            val noteId = currentState().note?.id ?: return@launch
+            val intent = Intent(context, PinWidgetReceiver::class.java)
+            intent.putExtra(NOTE_ID, currentState().note?.id)
+            val pendingIntent = PendingIntent.getBroadcast(context, noteId.toInt(), intent, PendingIntent.FLAG_IMMUTABLE)
+            GlanceAppWidgetManager(context).requestPinGlanceAppWidget(
+                NoteWidgetReceiver::class.java,
+                successCallback = pendingIntent
+            )
+        }
     }
 
     private fun activate(noteId: Long) {

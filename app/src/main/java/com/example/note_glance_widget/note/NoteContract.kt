@@ -13,7 +13,10 @@ class NoteContract {
             val text: String
         ) : Event()
 
-        object PinWidget : Event()
+        data class PinWidget(
+            val title: String,
+            val text: String
+        ) : Event()
     }
 
     data class State(val note: Note?) : ViewState {

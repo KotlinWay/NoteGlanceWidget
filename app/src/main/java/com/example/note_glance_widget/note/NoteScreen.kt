@@ -45,7 +45,7 @@ fun NoteScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         Card(
             backgroundColor = Color.Blue.copy(0.2f),
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 52.dp)
         ) {
             Column {
                 TextField(
@@ -84,7 +84,12 @@ fun NoteScreen(
         }
 
         FAB(R.drawable.ic_pin_widget, Alignment.BottomStart) {
-            viewModel.setEvent(Event.PinWidget)
+            viewModel.setEvent(
+                Event.PinWidget(
+                    title = titleFieldValue.text,
+                    text = textFieldValue.text
+                )
+            )
         }
     }
 }
