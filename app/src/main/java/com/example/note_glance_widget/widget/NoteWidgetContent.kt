@@ -23,6 +23,7 @@ import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import com.example.note_glance_widget.R
 import com.example.note_glance_widget.root.RootActivity
+import com.example.note_glance_widget.widget.WidgetKeys.Params.noteIdParam
 import com.example.note_glance_widget.widget.WidgetKeys.Prefs.noteIdPK
 import com.example.note_glance_widget.widget.WidgetKeys.Prefs.noteLastUpdatePK
 import com.example.note_glance_widget.widget.WidgetKeys.Prefs.noteTextPK
@@ -71,7 +72,7 @@ fun WidgetText(text: String, noteId: Long, fontSize: TextUnit = 20.sp) {
         modifier = GlanceModifier.clickable(
             actionStartActivity<RootActivity>(
                 parameters = actionParametersOf(
-                    WidgetKeys.Params.noteIdParam to noteId
+                    noteIdParam to noteId
                 )
             )
         )

@@ -30,7 +30,7 @@
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info" />
+                android:resource="@xml/widget_meta" />
         </receiver>
 
         <receiver
