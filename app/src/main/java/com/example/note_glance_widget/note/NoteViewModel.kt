@@ -45,15 +45,21 @@ class NoteViewModel @Inject constructor(
 
     private fun handlePinWidget(title: String, text: String) {
         viewModelScope.launch {
-            currentState().note?.copy()?.let { notesRepository.updateNote(it.copy(title = title, text = text)) }
-            val noteId = currentState().note?.id ?: return@launch
-            val intent = Intent(context, PinWidgetReceiver::class.java)
-            intent.putExtra(NOTE_ID, currentState().note?.id)
-            val pendingIntent = PendingIntent.getBroadcast(context, noteId.toInt(), intent, PendingIntent.FLAG_IMMUTABLE)
-            GlanceAppWidgetManager(context).requestPinGlanceAppWidget(
-                NoteWidgetReceiver::class.java,
-                successCallback = pendingIntent
-            )
+            currentState().note?.let { note ->
+                notesRepository.updateNote(note.copy(title = title, text = text))
+                val intent = Intent(context, PinWidgetReceiver::class.java)
+                intent.putExtra(NOTE_ID, note.id)
+                val pendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    note.id.toInt(),
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE
+                )
+                GlanceAppWidgetManager(context).requestPinGlanceAppWidget(
+                    NoteWidgetReceiver::class.java,
+                    successCallback = pendingIntent
+                )
+            }
         }
     }
 
@@ -61,7 +67,7 @@ class NoteViewModel @Inject constructor(
         if (noteId == Long.MIN_VALUE) obtainNewNote() else bindNoteToState(noteId)
     }
 
-    private fun obtainNewNote() = viewModelScope.launch{
+    private fun obtainNewNote() = viewModelScope.launch {
         val newNoteId = notesRepository.addNewNote()
         val note = notesRepository.getNote(newNoteId)?.toEntity() ?: return@launch
         updateState { copy(note = note) }

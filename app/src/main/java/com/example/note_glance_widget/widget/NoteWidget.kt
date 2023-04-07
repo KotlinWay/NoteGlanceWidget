@@ -37,9 +37,12 @@ suspend fun GlanceAppWidgetManager.mapNoteToWidget(context: Context, note: Note)
     getGlanceIds(NoteWidget::class.java)
         .forEach { glanceId ->
             updateAppWidgetState(context, glanceId) { prefs ->
-                prefs[noteTitlePK] = note.title
-                prefs[noteTextPK] = note.text
-                prefs[noteLastUpdatePK] = note.formatUpdatedAt
+                if(prefs[noteIdPK] == note.id) {
+                    prefs[noteTitlePK] = note.title
+                    prefs[noteTextPK] = note.text
+                    prefs[noteLastUpdatePK] = note.formatUpdatedAt
+                    NoteWidget().update(context, glanceId)
+                }
             }
             NoteWidget().updateIf<Preferences>(context) {
                 it[noteIdPK] == note.id
